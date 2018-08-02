@@ -4,6 +4,12 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Tymon\JWTAuth\Exceptions\InvalidClaimException;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\PayloadException;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class Handler extends ExceptionHandler
 {
@@ -48,6 +54,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        $this->renderJWTExceptions($exception);
+
         return parent::render($request, $exception);
+    }
+
+    private function renderJWTExceptions(Exception $exception)
+    {
+        if($exception instanceof JWTException) {
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], $exception->getStatusCode());
+        }
     }
 }
