@@ -17,6 +17,7 @@ class GenerateFirstUserAndAssignSuperAdminRole extends Seeder
         $this->truncateTables();
         $this->seedRoles();
         $this->seedAdminUsers();
+        $this->associateToSuperAdmin();
 
         cache()->forget('spatie.permission.cache');
     }
@@ -27,7 +28,7 @@ class GenerateFirstUserAndAssignSuperAdminRole extends Seeder
     private function seedRoles(): void
     {
         foreach(config('user_roles') as $role) {
-            Role::create([ 'name' => $role ]);
+            Role::firstOrCreate([ 'name' => $role ]);
         }
     }
 
@@ -61,6 +62,16 @@ class GenerateFirstUserAndAssignSuperAdminRole extends Seeder
         $adminClient->assignRole(Role::findByName(config('user_roles.client_admin')));
     }
 
+    private function associateToSuperAdmin()
+    {
+        $superAdmin = User::find(1);
+        $adminGroup = User::find(2);
+        $adminClient = User::find(3);
+
+        $superAdmin->associateWith($adminGroup);
+        $superAdmin->associateWith($adminClient);
+    }
+
     /**
      * Truncates the table needed for seeding
      */
@@ -72,6 +83,11 @@ class GenerateFirstUserAndAssignSuperAdminRole extends Seeder
 
         DB::table($spatieTables['roles'])->truncate();
         DB::table($spatieTables['permissions'])->truncate();
+
+        DB::table($spatieTables['model_has_permissions'])->truncate();
+        DB::table($spatieTables['model_has_roles'])->truncate();
+
+        DB::table($spatieTables['role_has_permissions'])->truncate();
 
         DB::table('users')->truncate();
 

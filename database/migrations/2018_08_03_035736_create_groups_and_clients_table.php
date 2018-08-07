@@ -15,15 +15,21 @@ class CreateGroupsAndClientsTable extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->increments('id');
+
             $table->string('name')->unique();
-            $table->text('detail');
+            $table->string('url');
+            $table->text('detail')->nullable();
+
             $table->timestamps();
         });
 
         Schema::create('clients', function (Blueprint $table) {
             $table->increments('id');
+
             $table->string('name')->unique();
-            $table->text('detail');
+            $table->string('url');
+            $table->text('detail')->nullable();
+
             $table->timestamps();
         });
 
