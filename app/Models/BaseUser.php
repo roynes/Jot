@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasAccount;
 use App\Traits\HasAssociatedUsers;
 use App\Traits\HasClients;
 use App\Traits\HasGroups;
@@ -13,7 +14,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class BaseUser extends Authenticatable implements JWTSubject
 {
     use Notifiable, HasRoles, HasAssociatedUsers,
-        HasGroups, HasClients;
+        HasGroups, HasClients, HasAccount;
 
     /**
      * The attributes that are mass assignable.

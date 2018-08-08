@@ -8,7 +8,7 @@ trait HasClients
 {
     public function client()
     {
-        return $this->belongsTo(Client::class, 'id');
+        return $this->belongsTo(Client::class);
     }
 
     public function assignClient(Client $client)
@@ -17,6 +17,7 @@ trait HasClients
             $this->client()->dissociate();
         }
 
-        return $this->client()->associate($client);
+        $this->client()->associate($client);
+        $this->save();
     }
 }

@@ -3,10 +3,15 @@
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
+use App\Models\Account;
 use App\Models\User;
 
 class GenerateFirstUserAndAssignSuperAdminRole extends Seeder
 {
+    private $superAdmin;
+    private $adminGroup;
+    private $adminClient;
+
     /**
      * Run the database seeds.
      *
@@ -17,6 +22,7 @@ class GenerateFirstUserAndAssignSuperAdminRole extends Seeder
         $this->truncateTables();
         $this->seedRoles();
         $this->seedAdminUsers();
+        $this->associateUsersWithAccounts();
         $this->associateToSuperAdmin();
 
         cache()->forget('spatie.permission.cache');
@@ -37,39 +43,65 @@ class GenerateFirstUserAndAssignSuperAdminRole extends Seeder
      */
     private function seedAdminUsers(): void
     {
-        $superAdmin = User::create([
+        $this->superAdmin = User::create([
             'name' => 'superadmin',
             'email' => 'admin@admin.com',
             'password' => bcrypt('secret')
         ]);
 
-        $superAdminEmail = array_get(explode('@',$superAdmin->email), 0);
+        $superAdminEmail = array_get(explode('@',$this->superAdmin->email), 0);
 
-        $adminGroup = User::create([
+        $this->adminGroup = User::create([
             'name' => $superAdminEmail.'group',
             'email' => $superAdminEmail.'.group@'.$superAdminEmail.'.com',
             'password' => bcrypt('secret')
         ]);
 
-        $adminClient = User::create([
+        $this->adminClient = User::create([
             'name' => $superAdminEmail.'client',
             'email' => $superAdminEmail.'.client@'.$superAdminEmail.'.com',
             'password' => bcrypt('secret')
         ]);
 
-        $superAdmin->assignRole(Role::findByName(config('user_roles.super_admin')));
-        $adminGroup->assignRole(Role::findByName(config('user_roles.group_admin')));
-        $adminClient->assignRole(Role::findByName(config('user_roles.client_admin')));
+        $this->superAdmin->assignRole(Role::findByName(config('user_roles.super_admin')));
+        $this->adminGroup->assignRole(Role::findByName(config('user_roles.group_admin')));
+        $this->adminClient->assignRole(Role::findByName(config('user_roles.client_admin')));
     }
 
     private function associateToSuperAdmin()
     {
-        $superAdmin = User::find(1);
-        $adminGroup = User::find(2);
-        $adminClient = User::find(3);
+        $this->superAdmin->associateWith($this->adminGroup);
+        $this->superAdmin->associateWith($this->adminClient);
+    }
 
-        $superAdmin->associateWith($adminGroup);
-        $superAdmin->associateWith($adminClient);
+    private function associateUsersWithAccounts()
+    {
+        $this->superAdmin->account()->create([
+            'type' => $this->superAdmin->roles->first()->name
+        ]);
+
+        $groupAdminAccount = Account::create([
+            'type' => config('user_roles.group_admin')
+        ]);
+
+        $clientAdminAccount = Account::create([
+            'type' => config('user_roles.client_admin')
+        ]);
+
+        $group = factory(\App\Models\Group::class)->create();
+        $client = factory(\App\Models\Client::class)->create();
+
+        $groupAdminAccount->assignGroup($group);
+        $groupAdminAccount->save();
+
+        $groupAdminAccount->assignUser($this->adminGroup);
+        $groupAdminAccount->save();
+
+        $clientAdminAccount->assignClient($client);
+        $clientAdminAccount->save();
+
+        $clientAdminAccount->assignUser($this->adminClient);
+        $clientAdminAccount->save();
     }
 
     /**
@@ -90,6 +122,7 @@ class GenerateFirstUserAndAssignSuperAdminRole extends Seeder
         DB::table($spatieTables['role_has_permissions'])->truncate();
 
         DB::table('users')->truncate();
+        DB::table('accounts')->truncate();
 
         Schema::enableForeignKeyConstraints();
     }

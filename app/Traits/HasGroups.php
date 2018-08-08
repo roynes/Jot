@@ -8,15 +8,16 @@ trait HasGroups
 {
     public function group()
     {
-        return $this->belongsTo(Group::class, 'id');
+        return $this->belongsTo(Group::class);
     }
 
     public function assignGroup(Group $group)
     {
         if(! $this->has('group')->count()) {
-            $this->groups()->dissociate();
+            $this->group()->dissociate();
         }
 
-        $this->groups()->associate($group);
+        $this->group()->associate($group);
+        $this->save();
     }
 }

@@ -19,10 +19,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware([
     'auth:api',
-    'role:'.implode(',', get_roles(['super_admin', 'group_admin', 'client_admin']))
+    'role:'.implode(',', get_roles(['group_admin', 'group_admin', 'super_admin']))
 ])->group(function() {
-    Route::post('groups/register/user', 'RegistrationController@registerGroupUser');
-    Route::post('clients/register/user', 'RegistrationController@registerClientUser');
+    Route::post('register/group/user', 'RegistrationController@registerGroupUser')
+        ->name('register.group.end.user');
+
+    Route::post('register/client/user', 'RegistrationController@registerClientUser')
+        ->name('register.client.end.user');
 });
 
 Route::post('login', 'AuthController@login');
@@ -31,7 +34,14 @@ Route::middleware('auth:api')->group(function() {
     Route::post('logout', 'AuthController@logout');
 
     Route::middleware('role:'.config('user_roles.super_admin'))->group(function() {
-        Route::post('register', 'RegistrationController@register');
+        Route::post('register', 'RegistrationController@register')
+            ->name('register.super.admin');
+
+        Route::post('register/group/admin', 'RegistrationController@registerGroupAdmin')
+            ->name('register.group.admin');
+
+        Route::post('register/client/admin', 'RegistrationController@registerClientAdmin')
+            ->name('register.client.admin');
 
         Route::prefix('groups')->group(function() {
             Route::get('/', 'GroupsController@index');
@@ -44,5 +54,9 @@ Route::middleware('auth:api')->group(function() {
             Route::get('/', 'ClientsController@index');
             Route::post('/', 'ClientsController@create');
         });
+    });
+
+    Route::middleware('role:'.config('user_roles.group_admin'))->group(function() {
+        // todo:
     });
 });
