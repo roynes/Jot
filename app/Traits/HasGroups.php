@@ -13,6 +13,10 @@ trait HasGroups
 
     public function assignGroup(Group $group)
     {
-        return $this->group()->associate($group);
+        if(! $this->has('group')->count()) {
+            $this->groups()->dissociate();
+        }
+
+        $this->groups()->associate($group);
     }
 }

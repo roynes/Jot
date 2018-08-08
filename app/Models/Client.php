@@ -2,25 +2,24 @@
 
 namespace App\Models;
 
+use App\Traits\HasGroups;
 use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
+    use HasGroups;
+
     protected $fillable = [
         'name', 'url', 'detail'
     ];
 
     public function groups()
     {
-        return $this->belongsTo(Group::class, 'id');
+        return $this->group();
     }
 
-    public function assignToGroup($group)
+    public function assignToGroup(Group $group)
     {
-        if(! $this->has('groups')->count()) {
-            $this->groups()->dissociate();
-        }
-
-        $this->groups()->associate($group);
+        $this->assignGroup($group);
     }
 }

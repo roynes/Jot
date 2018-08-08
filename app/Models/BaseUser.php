@@ -7,7 +7,8 @@ use App\Traits\HasClients;
 use App\Traits\HasGroups;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;use Tymon\JWTAuth\Contracts\JWTSubject;
+use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class BaseUser extends Authenticatable implements JWTSubject
 {

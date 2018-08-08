@@ -13,6 +13,10 @@ trait HasClients
 
     public function assignClient(Client $client)
     {
-        return $this->client()->associate($group);
+        if($this->has('client')->count()) {
+            $this->client()->dissociate();
+        }
+
+        return $this->client()->associate($client);
     }
 }
