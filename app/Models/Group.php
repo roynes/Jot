@@ -3,21 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User;
+use App\Traits\HasAccount;
 
 class Group extends Model
 {
+    use HasAccount;
+
     protected $fillable = [
         'name', 'url', 'detail'
     ];
-
-    public function clients()
-    {
-        return $this->hasMany(Client::class, 'id');
-    }
-
-    public function users()
-    {
-        return $this->hasMany(User::class, 'id');
-    }
 }

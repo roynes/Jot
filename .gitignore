@@ -23,3 +23,5 @@ Homestead.json
 .idea/*
 
 bash.exe.stackdump
+
+storage/*

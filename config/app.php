@@ -181,7 +181,9 @@ return [
         /*
          * JWT Service
          */
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+
+        Clockwork\Support\Laravel\ClockworkServiceProvider::class,
     ],
 
     /*
@@ -229,7 +231,8 @@ return [
         'Storage' => Illuminate\Support\Facades\Storage::class,
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
-        'View' => Illuminate\Support\Facades\View::class
+        'View' => Illuminate\Support\Facades\View::class,
+        'Clockwork' => Clockwork\Support\Laravel\Facade::class,
 
     ],
 

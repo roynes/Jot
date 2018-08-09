@@ -15,4 +15,9 @@ trait HasAccount
     {
         $this->account()->save($account);
     }
+
+    public function accounts()
+    {
+        return $this->hasMany(Account::class);
+    }
 }

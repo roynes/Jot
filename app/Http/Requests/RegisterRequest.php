@@ -23,6 +23,13 @@ class RegisterRequest extends FormRequest
      */
     public function rules()
     {
+        /**
+         * To keep out error when running route:list
+         */
+        if(app()->runningInConsole()) {
+            return [];
+        }
+
         $defaults = [
             'email' => 'required|string|email|max:255|unique:users',
             'name' => 'required',
