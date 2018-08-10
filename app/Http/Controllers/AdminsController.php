@@ -38,12 +38,12 @@ class AdminsController extends Controller
             })
             ->first();
 
-        if($associatedUser->account->group->id == request(['group_id']))
+        if($associatedUser->account->group->id == request('group_id'))
         {
             $token = auth()->login($associatedUser);
 
             return response()->json([
-                'message' => 'Successfully logged in',
+                'message' => 'Successfully logged in as group admin',
                 'data' => [
                     'token' => $token,
                     'redirect_to' => Group::find(1)->url
