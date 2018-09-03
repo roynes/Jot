@@ -25,3 +25,4 @@ Homestead.json
 bash.exe.stackdump
 
 storage/*
+package-lock.json
