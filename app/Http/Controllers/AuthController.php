@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+
 class AuthController extends Controller
 {
     public function login()
@@ -15,7 +17,11 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid Credentials'], 401);
         }
 
-        return response()->json(['token' => $token]);
+        return response()->json([
+            'token' => $token,
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => User::with('account')->whereId(auth()->user()->id)->first()
+        ]);
     }
 
     public function logout()
