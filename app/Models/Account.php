@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasClients;
 use App\Traits\HasGroups;
 use App\Traits\HasUsers;
 
-class Account extends Model
+class Account extends BaseModel
 {
     use HasUsers, HasGroups, HasClients;
 

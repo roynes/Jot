@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Traits\HasGroups;
-use Illuminate\Database\Eloquent\Model;
 
-class Client extends Model
+class Client extends BaseModel
 {
     use HasGroups;
 

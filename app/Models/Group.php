@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasAccount;
 
-class Group extends Model
+class Group extends BaseModel
 {
     use HasAccount;
 

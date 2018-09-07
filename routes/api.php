@@ -31,6 +31,7 @@ Route::middleware([
 Route::post('login', 'AuthController@login');
 
 Route::middleware('auth:api')->group(function() {
+    Route::get('user/{user}', 'UsersController@show');
     Route::post('logout', 'AuthController@logout');
 
     Route::middleware('role:'.config('user_roles.super_admin'))->group(function() {
