@@ -8,12 +8,10 @@ class GroupsController extends Controller
 {
     public function index()
     {
-        return response()->json([
-            'data' =>
-            [
-                'groups' => Group::all()
-            ]
-        ]);
+        return response()
+            ->json([
+                'groups' => Group::paginate(request()->get('per_page') ?? 6)
+            ]);
     }
 
     public function create()

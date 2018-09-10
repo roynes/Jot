@@ -8,12 +8,10 @@ class ClientsController extends Controller
 {
     public function index()
     {
-        return response()->json([
-            'data' =>
-            [
-                'clients' => Client::all()
-            ]
-        ]);
+        return response()
+            ->json([
+                'clients' => Client::paginate(request()->get('per_page') ?? 6)
+            ]);
     }
 
     public function create()
