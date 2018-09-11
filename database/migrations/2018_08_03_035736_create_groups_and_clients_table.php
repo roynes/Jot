@@ -17,8 +17,7 @@ class CreateGroupsAndClientsTable extends Migration
             $table->increments('id');
 
             $table->string('name')->unique();
-            $table->string('url');
-            $table->text('detail')->nullable();
+            $table->json('settings')->nullable();
 
             $table->timestamps();
         });
@@ -27,8 +26,7 @@ class CreateGroupsAndClientsTable extends Migration
             $table->increments('id');
 
             $table->string('name')->unique();
-            $table->string('url');
-            $table->text('detail')->nullable();
+            $table->json('settings')->nullable();
 
             $table->timestamps();
         });

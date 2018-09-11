@@ -3,17 +3,19 @@
 use Faker\Generator as Faker;
 
 $factory->define(App\Models\Group::class, function (Faker $faker) {
+    $object = (object)[ 'email' => $faker->email, 'address' => $faker->address ];
+
     return [
-        'name' => $faker->domainName,
-        'url' => $faker->url,
-        'detail' => $faker->sentence
+        'name' => $faker->company,
+        'settings' => json_encode($object)
     ];
 });
 
 $factory->define(App\Models\Client::class, function (Faker $faker) {
+    $object = (object)[ 'email' => $faker->email, 'address' => $faker->address ];
+
     return [
-        'name' => $faker->domainName,
-        'url' => $faker->url,
-        'detail' => $faker->sentence
+        'name' => $faker->company,
+        'settings' => json_encode($object)
     ];
 });

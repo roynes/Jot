@@ -9,6 +9,10 @@ class Group extends BaseModel
     use HasAccount;
 
     protected $fillable = [
-        'name', 'url', 'detail'
+        'name', 'settings'
+    ];
+
+    protected $casts = [
+        'settings' => 'array'
     ];
 }

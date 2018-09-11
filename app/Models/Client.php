@@ -12,6 +12,10 @@ class Client extends BaseModel
         'name', 'url', 'detail'
     ];
 
+    protected $casts = [
+        'settings' => 'array'
+    ];
+
     public function groups()
     {
         return $this->group();
