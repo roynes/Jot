@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Http\Resources\UserAccountRolesAndPermissions as Resource;
 
 class UsersController extends Controller
 {
@@ -14,7 +15,6 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        return response()
-            ->json($user->applyQueryParamRelation()->whereId($user->id)->first());
+        return response()->json(new Resource($user->applyQueryParamRelation()->whereId($user->id)->first()));
     }
 }

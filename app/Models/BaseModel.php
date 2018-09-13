@@ -29,7 +29,7 @@ class BaseModel extends Model
         $data = request(['with']);
 
         if(! is_null($with = $data['with'])) {
-            $target = $target->with($with);
+            $target = $target->with(explode(',', $with));
         }
 
         return $target;
