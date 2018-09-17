@@ -17,6 +17,7 @@ class UserAccountRolesAndPermissions extends Resource
         $account = optional($this->account);
 
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'account' => [
