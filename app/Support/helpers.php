@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Arr;
 
 if (! function_exists('get_roles')) {
     /**
@@ -24,5 +25,26 @@ if (! function_exists('get_roles')) {
         }
 
         return [];
+    }
+}
+
+if (! function_exists('only')) {
+    /**
+     * Returns the range of value in the specified $array $keys
+     *
+     * @param $array
+     * @param mixed ...$keys
+     *
+     * @return array
+     */
+    function only($array, ...$keys)
+    {
+        $result = [];
+
+        foreach ($keys as $key) {
+           $result[] = Arr::get($array, $key);
+        }
+
+        return $result;
     }
 }

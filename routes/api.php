@@ -62,4 +62,14 @@ Route::middleware('auth:api')->group(function() {
     Route::middleware('role:'.config('user_roles.group_admin'))->group(function() {
         // todo:
     });
+
+    Route::middleware(
+        'role:'.implode(
+            "|",
+            only(config('user_roles'), 'group_admin', 'super_admin')
+        )
+    )->group(function() {
+        Route::get('group/{group}/users', 'GroupsController@show');
+        Route::get('users', 'AccountsController@index');
+    });
 });

@@ -8,7 +8,7 @@ class AuthController extends Controller
     public function login()
     {
         $this->validate($data = request(), [
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email|exists:users,email|max:255',
             'password' => 'required|min:6'
         ]);
 

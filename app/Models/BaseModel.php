@@ -14,8 +14,9 @@ class BaseModel extends Model
      */
     public function applyQueryParamRelation (BaseModel $model = null)
     {
-        $validate = validator(['with'], [
-            'with' => 'string'
+        $validate = validator(['with', 'scope'], [
+            'with' => 'string',
+            'scope' => 'string'
         ]);
 
         if(is_null($target = $model)) {
@@ -26,10 +27,21 @@ class BaseModel extends Model
             return $target;
         }
 
-        $data = request(['with']);
+        $data = request(['with', 'scope']);
 
-        if(! is_null($with = $data['with'])) {
+        if(! is_null($with = array_get($data, 'with'))) {
             $target = $target->with(explode(',', $with));
+        }
+
+        if(! is_null($scopes = array_get($data, 'scope'))) {
+            foreach (explode(',', $scopes) as $scope) {
+                $datas = explode(':', $scope);
+
+                $query = array_get($datas, 0);
+                $value = array_get($datas, 1);
+
+                $target = !is_null($value) ? $target->$query($value) : $target->$query;
+            }
         }
 
         return $target;

@@ -20,8 +20,10 @@ class UserAccountRolesAndPermissions extends Resource
             'name' => $this->name,
             'email' => $this->email,
             'account' => [
-              'type' => $account->type,
-              'settings' => $account->settings
+                'type' => $account->type,
+                'settings' => $account->settings,
+                'client_id' => $account->client_id,
+                'group_id' => $account->group_id
             ],
             'roles' => $this->roles->pluck('name'),
             'permissions' => $this->permissions->pluck('name'),

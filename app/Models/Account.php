@@ -17,4 +17,9 @@ class Account extends BaseModel
     protected $casts = [
         'settings' => 'array'
     ];
+
+    public function scopeFilterGroup($query, $groupId)
+    {
+        return $query->whereGroupId($groupId)->where('user_id', '!=', auth()->user()->id);
+    }
 }

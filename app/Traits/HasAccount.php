@@ -18,6 +18,7 @@ trait HasAccount
 
     public function accounts()
     {
-        return $this->hasMany(Account::class);
+        return $this->hasMany(Account::class)
+            ->where('accounts.user_id', '!=', auth()->user()->id);
     }
 }

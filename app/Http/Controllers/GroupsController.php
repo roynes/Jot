@@ -14,6 +14,15 @@ class GroupsController extends Controller
             ]);
     }
 
+    public function show(Group $group)
+    {
+        return response()
+            ->json(
+                 $group->accounts()
+                     ->paginate(request()->get('per_page') ?? 6)
+            );
+    }
+
     public function create()
     {
         $this->validate(request(), [
