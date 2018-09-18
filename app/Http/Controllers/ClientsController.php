@@ -2,16 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ClientsListResource as Resource;
 use App\Models\Client;
+use App\Models\Group;
 
 class ClientsController extends Controller
 {
     public function index()
     {
-        return response()
-            ->json([
-                'clients' => Client::paginate(request()->get('per_page') ?? 6)
-            ]);
+        return Resource::collection(
+            Client::paginate(
+                request()->get('per_page') ?? 6
+            )
+        );
+
+    }
+
+    public function show(Group $group)
+    {
+        return Resource::collection(
+            $group->applyQueryParamRelation()
+                ->paginate(request()->get('per_page') ?? 6)
+        );
+
     }
 
     public function create()

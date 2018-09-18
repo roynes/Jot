@@ -24,11 +24,17 @@ class CreateGroupsAndClientsTable extends Migration
 
         Schema::create('clients', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('group_id')->nullable();
 
             $table->string('name')->unique();
             $table->json('settings')->nullable();
 
             $table->timestamps();
+
+            $table->foreign('group_id')
+                ->references('id')
+                ->on('groups')
+                ->onDelete('set null');
         });
 
         Schema::create('group_user', function (Blueprint $table) {
@@ -78,6 +84,7 @@ class CreateGroupsAndClientsTable extends Migration
         Schema::dropIfExists('groups');
         Schema::dropIfExists('clients');
 
+        Schema::dropIfExists('client_group');
         Schema::dropIfExists('group_user');
         Schema::dropIfExists('client_user');
 

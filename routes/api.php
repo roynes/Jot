@@ -51,7 +51,7 @@ Route::middleware('auth:api')->group(function() {
             Route::post('/', 'GroupsController@create');
         });
 
-        Route::prefix('clients')->group(function() {
+        Route::prefix('client')->group(function() {
             Route::put('{client}/assign-group/{group}', 'AdminsController@assignGroup');
 
             Route::get('/', 'ClientsController@index');
@@ -60,7 +60,7 @@ Route::middleware('auth:api')->group(function() {
     });
 
     Route::middleware('role:'.config('user_roles.group_admin'))->group(function() {
-        // todo:
+        // Todo: For specific role
     });
 
     Route::middleware(
@@ -69,7 +69,15 @@ Route::middleware('auth:api')->group(function() {
             only(config('user_roles'), 'group_admin', 'super_admin')
         )
     )->group(function() {
-        Route::get('group/{group}/users', 'GroupsController@show');
+        Route::get('clients', 'ClientsController@show');
+    });
+
+    Route::middleware(
+        'role:'.implode(
+            "|",
+            only(config('user_roles'), 'group_admin', 'super_admin', 'client_admin')
+        )
+    )->group(function() {
         Route::get('users', 'AccountsController@index');
     });
 });

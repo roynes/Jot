@@ -3,7 +3,7 @@
 use Faker\Generator as Faker;
 
 $factory->define(App\Models\Group::class, function (Faker $faker) {
-    $object = (object)[ 'email' => $faker->email, 'address' => $faker->address ];
+    $object = [ 'email' => $faker->email, 'address' => $faker->address ];
 
     return [
         'name' => $faker->company,
@@ -12,7 +12,7 @@ $factory->define(App\Models\Group::class, function (Faker $faker) {
 });
 
 $factory->define(App\Models\Client::class, function (Faker $faker) {
-    $object = (object)[ 'email' => $faker->email, 'address' => $faker->address ];
+    $object = [ 'email' => $faker->email, 'address' => $faker->address ];
 
     return [
         'name' => $faker->company,

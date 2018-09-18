@@ -23,6 +23,11 @@ class Account extends BaseModel
         return $query->whereGroupId($groupId)->where('user_id', '!=', auth()->user()->id);
     }
 
+    public function scopeFilterClient($query, $clientId)
+    {
+        return $query->whereClientId($clientId)->exceptUser(auth()->user()->id);
+    }
+
     public function scopeExceptUser($query, $userId = null)
     {
         return $query->where('user_id', '!=', $userId);

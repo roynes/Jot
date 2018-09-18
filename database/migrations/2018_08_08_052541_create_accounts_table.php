@@ -17,8 +17,8 @@ class CreateAccountsTable extends Migration
             $table->increments('id');
             $table->string('type');
 
-            $table->unsignedInteger('user_id')->nullable();;
-            $table->unsignedInteger('group_id')->nullable();;
+            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('group_id')->nullable();
             $table->unsignedInteger('client_id')->nullable();
 
             $table->json('settings')->nullable();

@@ -11,6 +11,11 @@ trait HasClients
         return $this->belongsTo(Client::class);
     }
 
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
+    }
+
     public function assignClient(Client $client)
     {
         if($this->has('client')->count()) {
