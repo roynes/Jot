@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Group;
 use App\Models\User;
+use Illuminate\Validation\Rule;
 
 class AdminsController extends Controller
 {
@@ -27,6 +28,45 @@ class AdminsController extends Controller
         $user->assignClient($client);
 
         return response()->json(['message' => 'User successfully assigned to a client']);
+    }
+
+    public function loginAs()
+    {
+        $this->validate(request(), [
+            'type' => [
+                'required', 'string',
+                Rule::in(config('user_roles'))
+            ],
+            'id' => 'numeric|required'
+        ]);
+
+        $data = request(['type', 'id']);
+
+        $associatedUser = auth()->user()
+            ->associatedUsers
+            ->filter(function ($user, $key) use ($data) {
+                if(str_contains($data['type'], 'group')) {
+                    return $user->hasRole($data['type']) && $user->account->group_id == $data['id'];
+                }
+
+                return $user->hasRole($data['type']) && $user->account->client == $data['id'];
+            })
+            ->first();
+
+        if($associatedUser == null) {
+            return response()->json([
+                'message' => 'No associated user for this client/group',
+            ]);
+        }
+
+        $token = auth()->setTTL(config('jwt.ttl') / 2)->login($associatedUser);
+
+        return response()->json([
+            'token' => $token,
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'au' => $associatedUser->id
+        ]);
+
     }
 
     public function loginAsGroupAdmin()

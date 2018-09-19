@@ -44,7 +44,7 @@ Route::middleware('auth:api')->group(function() {
         Route::post('register/client/admin', 'RegistrationController@registerClientAdmin')
             ->name('register.client.admin');
 
-        Route::post('login/group', 'AdminsController@loginAsGroupAdmin');
+        Route::post('login-as', 'AdminsController@loginAs');
 
         Route::prefix('groups')->group(function() {
             Route::get('/', 'GroupsController@index');
