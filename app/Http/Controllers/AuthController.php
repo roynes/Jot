@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserAccountRolesAndPermissionsResource as Resource;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -19,6 +21,11 @@ class AuthController extends Controller
         return response()->json([
             'token' => $token,
             'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => new Resource(
+                User::with('account', 'permissions', 'roles')
+                    ->whereId(auth()->user()->id)
+                    ->first()
+            )
         ]);
     }
 
@@ -26,12 +33,38 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
     }
 
-    public function loginTo()
+    public function reloginAs()
     {
-        // params should be: client/group to redirect to. probably
+        $associatedUser = auth()->user()
+            ->associatedUsers
+            ->filter(function($user, $key) {
+                return $user->hasRole(config('user_roles.super_admin'));
+            })
+            ->first();
+
+        $token = auth()->login($associatedUser);
+
+        //sau = superadminuser
+        $resp["asau"] = new Resource(
+            User::with('account', 'permissions', 'roles')
+                ->whereId($associatedUser->id)
+                ->first()
+        );
+
+        return response()->json([
+            'token' => $token,
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => new Resource(
+                User::with('account', 'permissions', 'roles')
+                    ->whereId($associatedUser->id)
+                    ->first()
+            )
+        ]);
     }
 
 }

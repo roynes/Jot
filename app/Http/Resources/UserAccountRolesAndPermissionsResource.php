@@ -21,6 +21,7 @@ class UserAccountRolesAndPermissionsResource extends Resource
             'name' => $this->name,
             'email' => $this->email,
             'account' => [
+                'id' => $account->id,
                 'type' => $account->type,
                 'settings' => $account->settings,
                 'client_id' => $account->client_id,

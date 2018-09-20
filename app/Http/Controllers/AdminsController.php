@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserAccountRolesAndPermissionsResource as Resource;
+use Illuminate\Validation\Rule;
 use App\Models\Client;
 use App\Models\Group;
 use App\Models\User;
-use Illuminate\Validation\Rule;
 
 class AdminsController extends Controller
 {
@@ -56,6 +57,7 @@ class AdminsController extends Controller
         if($associatedUser == null) {
             return response()->json([
                 'message' => 'No associated user for this client/group',
+                'authenticated' => false
             ]);
         }
 
@@ -64,33 +66,11 @@ class AdminsController extends Controller
         return response()->json([
             'token' => $token,
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'au' => $associatedUser->id
+            'user' => new Resource(
+                User::with('account', 'permissions', 'roles')
+                    ->whereId($associatedUser->id)
+                    ->first()
+            )
         ]);
-
-    }
-
-    public function loginAsGroupAdmin()
-    {
-        $associatedUser = auth()->user()
-            ->associatedUsers
-            ->filter(function ($value, $key) {
-                return $value->hasRole(config('user_roles.group_admin'));
-            })
-            ->first();
-
-        if($associatedUser->account->group->id == request('group_id'))
-        {
-            $token = auth()->login($associatedUser);
-
-            return response()->json([
-                'message' => 'Successfully logged in as group admin',
-                'data' => [
-                    'token' => $token,
-                    'redirect_to' => Group::find(1)->url
-                ]
-            ]);
-        }
-
-        return response()->json(['message' => 'Associated user not found']);
     }
 }

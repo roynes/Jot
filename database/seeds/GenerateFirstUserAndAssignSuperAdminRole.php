@@ -72,6 +72,12 @@ class GenerateFirstUserAndAssignSuperAdminRole extends Seeder
     {
         $this->superAdmin->associateWith($this->adminGroup);
         $this->superAdmin->associateWith($this->adminClient);
+
+        $this->adminGroup->associateWith($this->superAdmin);
+        $this->adminGroup->associateWith($this->adminClient);
+
+        $this->adminClient->associateWith($this->adminGroup);
+        $this->adminClient->associateWith($this->superAdmin);
     }
 
     private function associateUsersWithAccounts()

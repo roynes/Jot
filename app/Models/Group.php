@@ -16,4 +16,9 @@ class Group extends BaseModel
     protected $casts = [
         'settings' => 'array'
     ];
+
+    public function scopeFilter($query, $groupId)
+    {
+        return $query->whereId($groupId);
+    }
 }

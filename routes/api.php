@@ -34,6 +34,16 @@ Route::middleware('auth:api')->group(function() {
     Route::get('user/{user}', 'UsersController@show');
     Route::post('logout', 'AuthController@logout');
 
+
+    Route::middleware(
+        'role:'.implode(
+            "|",
+            only(config('user_roles'), 'group_admin', 'client_admin')
+        )
+    )->group(function() {
+        Route::post('relogin-as', 'AuthController@reloginAs');
+    });
+
     Route::middleware('role:'.config('user_roles.super_admin'))->group(function() {
         Route::post('register', 'RegistrationController@register')
             ->name('register.super.admin');
