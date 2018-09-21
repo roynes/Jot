@@ -50,7 +50,7 @@ class AdminsController extends Controller
                     return $user->hasRole($data['type']) && $user->account->group_id == $data['id'];
                 }
 
-                return $user->hasRole($data['type']) && $user->account->client == $data['id'];
+                return $user->hasRole($data['type']) && $user->account->client_id == $data['id'];
             })
             ->first();
 
