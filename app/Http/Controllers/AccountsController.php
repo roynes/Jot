@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UserAccountResource as Resource;
+use App\Http\Resources\AccountResource as Resource;
 use App\Models\Account;
 
 class  AccountsController extends Controller
