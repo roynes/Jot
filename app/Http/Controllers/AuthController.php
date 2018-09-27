@@ -15,7 +15,13 @@ class AuthController extends Controller
         ]);
 
         if(! $token = auth()->attempt($data->only(['email', 'password']))) {
-            return response()->json(['message' => 'Invalid Credentials'], 401);
+            return response()->json([
+                'errors' => [
+                    'credentials' => [
+                        'Invalid credentails', 'Email/password is incorrect'
+                    ]
+                ]
+            ], 401);
         }
 
         return response()->json([
