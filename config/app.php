@@ -184,6 +184,7 @@ return [
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
         Clockwork\Support\Laravel\ClockworkServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
     ],
 
     /*
@@ -198,7 +199,6 @@ return [
     */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
@@ -233,7 +233,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Clockwork' => Clockwork\Support\Laravel\Facade::class,
-
+        'Image' => Intervention\Image\Facades\Image::class
     ],
 
 ];
