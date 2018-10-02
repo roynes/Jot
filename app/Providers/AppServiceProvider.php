@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Console\JWTGenerateCommandFix;
+use App\Models\Group;
+use App\Observers\GroupObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->instantiateJWTGenerateCommandFix();
+        Group::observe(GroupObserver::class);
     }
 
     /**

@@ -48,3 +48,17 @@ if (! function_exists('only')) {
         return $result;
     }
 }
+
+if (! function_exists('extract_extension_from_image_mime')) {
+    /**
+     * Returns the image type from a given $mime
+     *
+     * @param string $mime
+     *
+     * @return string
+     */
+    function extract_extension_from_image_mime($mime)
+    {
+        return explode('/', $mime)[1];
+    }
+}

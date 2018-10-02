@@ -57,6 +57,7 @@ Route::middleware('auth:api')->group(function() {
         Route::post('login-as', 'AdminsController@loginAs');
 
         Route::prefix('groups')->group(function() {
+            Route::delete('/{group}', 'GroupsController@destroy');
             Route::get('/', 'GroupsController@index');
             Route::post('/', 'GroupsController@create');
         });
