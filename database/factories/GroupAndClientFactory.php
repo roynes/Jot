@@ -3,19 +3,31 @@
 use Faker\Generator as Faker;
 
 $factory->define(App\Models\Group::class, function (Faker $faker) {
-    $object = [ 'email' => $faker->email, 'address' => $faker->address ];
+    $object = [
+        'email' => $faker->email,
+        'street' => $faker->streetName,
+        'city' => $faker->city,
+        'description' => $faker->sentences,
+        'state' => $faker->countryISOAlpha3
+    ];
 
     return [
         'name' => $faker->company,
-        'settings' => json_encode($object)
+        'settings' => $object
     ];
 });
 
 $factory->define(App\Models\Client::class, function (Faker $faker) {
-    $object = [ 'email' => $faker->email, 'address' => $faker->address ];
+    $object = [
+        'email' => $faker->email,
+        'street' => $faker->streetName,
+        'city' => $faker->city,
+        'description' => $faker->sentences,
+        'state' => $faker->countryISOAlpha3
+    ];
 
     return [
         'name' => $faker->company,
-        'settings' => json_encode($object)
+        'settings' => $object
     ];
 });

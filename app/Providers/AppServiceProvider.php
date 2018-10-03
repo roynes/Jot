@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Console\JWTGenerateCommandFix;
+use App\Models\Client;
 use App\Models\Group;
+use App\Observers\ClientObserver;
 use App\Observers\GroupObserver;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->instantiateJWTGenerateCommandFix();
         Group::observe(GroupObserver::class);
+        Client::observe(ClientObserver::class);
     }
 
     /**

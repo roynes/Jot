@@ -13,5 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(GenerateFirstUserAndAssignSuperAdminRole::class);
         $this->call(GroupAndClientSeeder::class);
+        $this->call(StateSeeder::class);
     }
 }
