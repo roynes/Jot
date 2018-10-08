@@ -25,4 +25,9 @@ class Client extends BaseModel
     {
         $this->assignGroup($group);
     }
+
+    public function scopeByGroupOf($query, $id)
+    {
+        return $query->whereGroupId($id);
+    }
 }

@@ -52,7 +52,7 @@ Route::middleware('auth:api')->group(function() {
         });
 
         Route::prefix('clients')->group(function() {
-            Route::put('{client}/assign-group/{group}', 'AdminsController@assignGroup');
+            Route::put('{client}/assign -group/{group}', 'AdminsController@assignGroup');
             Route::delete('/{client}', 'ClientsController@destroy');
             Route::get('/', 'ClientsController@index');
             Route::post('/', 'ClientsController@create');
@@ -65,7 +65,7 @@ Route::middleware('auth:api')->group(function() {
             only(config('user_roles'), 'group_admin', 'super_admin')
         )
     )->group(function() {
-        Route::get('clients', 'ClientsController@show');
+        Route::get('client', 'ClientsController@show');
     });
 
     Route::middleware(

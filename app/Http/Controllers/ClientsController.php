@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ClientsListResource as Resource;
-use App\Models\Client;
-use App\Models\Group;
-use App\Rules\EncodedStringIsImage;
 use Intervention\Image\Facades\Image;
+use App\Rules\EncodedStringIsImage;
+use App\Models\Client;
 
 class ClientsController extends Controller
 {
@@ -20,10 +19,10 @@ class ClientsController extends Controller
 
     }
 
-    public function show(Group $group)
+    public function show(Client $client)
     {
         return Resource::collection(
-            $group->applyQueryParamRelation()
+            $client->applyQueryParamRelation()
                 ->paginate(request()->get('per_page') ?? 6)
         );
 
