@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->instantiateJWTGenerateCommandFix();
+
         Group::observe(GroupObserver::class);
         Client::observe(ClientObserver::class);
     }

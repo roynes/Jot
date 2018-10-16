@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Http\Requests\RegisterRequest;
 use Spatie\Permission\Models\Role;
 use App\Models\Account;
 use App\Models\Client;
@@ -10,61 +11,25 @@ use App\Models\User;
 
 trait RegistersAndAssigns
 {
-    public function register()
-    {
-        $this->createUser();
-
-        return response()->json(['message' => 'Registration Successful']);
-    }
-
-    public function registerGroupUser()
+    public function register(RegisterRequest $request)
     {
         $user = $this->createUser();
 
-        $this->assign(
-            $user,
-            Group::find($this->request->get('group_id')),
-            config('user_roles.group_end_user')
-        );
+        $user->assignRole([$request->role]);
 
-        return response()->json(['message' => 'Registration Successful']);
-    }
+        if (!is_null($client = $request->client_id)) {
+            $user->assignClient(Client::find($client));
+        }
 
-    public function registerClientUser()
-    {
-        $user = $this->createUser();
+        if(!is_null($group = $request->group_id)) {
+            $user->assignGroup(Group::find($group));
+        }
 
-        $this->assign(
-            $user,
-            Client::find($this->request->get('client_id')),
-            config('user_roles.end_user')
-        );
-
-        return response()->json(['message' => 'Registration Successful']);
-    }
-
-    public function registerGroupAdmin()
-    {
-        $user = $this->createUser();
-
-        $this->assign(
-            $user,
-            Group::find($this->request->get('group_id')),
-            config('user_roles.group_admin')
-        );
-
-        return response()->json(['message' => 'Registration Successful']);
-    }
-
-    public function registerClientAdmin()
-    {
-        $user = $this->createUser();
-
-        $this->assign(
-            $user,
-            Client::find($this->request->get('client_id')),
-            config('user_roles.client_admin')
-        );
+        $user->account()->create([
+            'type' => $request->role,
+            'client_id' => $request->client_id,
+            'group_id' => $request->group_id,
+        ]);
 
         return response()->json(['message' => 'Registration Successful']);
     }

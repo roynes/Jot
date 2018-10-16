@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ClientsListResource as Resource;
+use http\Env\Response;
 use Intervention\Image\Facades\Image;
 use App\Rules\EncodedStringIsImage;
 use App\Models\Client;
@@ -11,12 +12,9 @@ class ClientsController extends Controller
 {
     public function index()
     {
-        return Resource::collection(
-            Client::paginate(
-                request()->get('per_page') ?? 6
-            )
-        );
-
+        return response()->json([
+            'clients' => Client::all()
+        ]);
     }
 
     public function show(Client $client)

@@ -13,14 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware([
+    'auth:api',
+    'role:'.config('user_roles.super_admin')
+])->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::post('login', 'AuthController@login');
 
 Route::middleware('auth:api')->group(function() {
-    Route::get('user/{user}', 'UsersController@show');
+
     Route::post('logout', 'AuthController@logout');
 
 
@@ -65,6 +68,7 @@ Route::middleware('auth:api')->group(function() {
         )
     )->group(function() {
         Route::get('clients', 'ClientsController@show');
+        Route::get('clients/all', 'ClientsController@index');
     });
 
     Route::middleware(
@@ -73,6 +77,8 @@ Route::middleware('auth:api')->group(function() {
             only(config('user_roles'), 'group_admin', 'super_admin', 'client_admin')
         )
     )->group(function() {
+        Route::get('user/{user}', 'UsersController@show');
+
         Route::post('register/group/user', 'RegistrationController@registerGroupUser')
             ->name('register.group.end.user');
 

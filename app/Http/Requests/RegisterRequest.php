@@ -33,47 +33,12 @@ class RegisterRequest extends FormRequest
         $defaults = [
             'email' => 'required|string|email|max:255|unique:users',
             'name' => 'required',
-            'password'=> 'required|min:6'
+            'password'=> 'required|min:6',
+            'role' => 'required|exists:roles,name',
+            'client_id' => 'nullable|numeric|exists:clients',
+            'group_id' => 'nullable|numeric|exists:groups'
         ];
 
-        if($this->routeCheck(route('register.group.admin'), route('register.group.end.user'))
-            && request()->method() === 'POST'
-        ) {
-            return array_merge(
-                $defaults,
-                ['group_id' => 'numeric|required|exists:groups,id']
-            );
-        }
-
-        if($this->routeCheck(route('register.client.admin'), route('register.client.end.user'))
-            && request()->method() === 'POST'
-        ) {
-            return array_merge(
-                $defaults,
-                ['client_id' => 'numeric|required|exists:clients,id']
-            );
-        }
-
         return $defaults;
-    }
-
-    /**
-     * Checks the given request url
-     *
-     * @param $url
-     * @return bool
-     */
-    private function routeCheck(...$url)
-    {
-        $curUrl = request()->url();
-        $match = false;
-
-        foreach($url as $route)
-        {
-            if($route === $curUrl)
-                $match = true;
-        }
-
-        return $match;
     }
 }
