@@ -27,8 +27,6 @@ class GroupAndClientSeeder extends Seeder
 
         DB::table('groups')->truncate();
         DB::table('clients')->truncate();
-        DB::table('group_user')->truncate();
-        DB::table('client_user')->truncate();
 
         Schema::enableForeignKeyConstraints();
     }

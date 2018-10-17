@@ -33,10 +33,9 @@ class RegisterRequest extends FormRequest
         $defaults = [
             'email' => 'required|string|email|max:255|unique:users',
             'name' => 'required',
-            'password'=> 'required|min:6',
             'role' => 'required|exists:roles,name',
-            'client_id' => 'nullable|numeric|exists:clients',
-            'group_id' => 'nullable|numeric|exists:groups'
+            'client_id' => 'nullable|numeric|exists:clients,id',
+            'group_id' => 'nullable|numeric|exists:groups,id'
         ];
 
         return $defaults;

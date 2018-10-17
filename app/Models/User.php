@@ -14,7 +14,7 @@ use App\Traits\HasGroups;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, HasRoles, HasAssociatedUsers,
-        HasGroups, HasClients, HasAccount;
+        HasAccount;
 
     /**
      * The attributes that are mass assignable.

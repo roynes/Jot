@@ -13,32 +13,27 @@ trait RegistersAndAssigns
 {
     public function register(RegisterRequest $request)
     {
-        $user = $this->createUser();
+        $password = str_random();
 
-        $user->assignRole([$request->role]);
+        $user = $this->registerUser(array_merge(request()->only(['email', 'name']), compact('password')));
 
-        if (!is_null($client = $request->client_id)) {
-            $user->assignClient(Client::find($client));
-        }
+        $this->assignAccountAndRoles($user, $request->role);
+        $this->assignToSubdomain($user, $request->client_id, $request->group_id);
 
-        if(!is_null($group = $request->group_id)) {
-            $user->assignGroup(Group::find($group));
-        }
-
-        $user->account()->create([
-            'type' => $request->role,
-            'client_id' => $request->client_id,
-            'group_id' => $request->group_id,
+        return response()->json([
+            'message' => 'Registration Successful',
+            'user' => [
+                'email' => $user->email,
+                'password' => $password
+            ]
         ]);
-
-        return response()->json(['message' => 'Registration Successful']);
     }
 
     /**
      * Creates user from the given data
      *
      * @param array $data
-     * @return mixed
+     * @return mixed|User
      */
     private function registerUser(array $data)
     {
@@ -49,15 +44,6 @@ trait RegistersAndAssigns
         ]);
     }
 
-    /**
-     * Validates and returns the newly created user
-     *
-     * @return User
-     */
-    private function createUser()
-    {
-        return $this->registerUser($this->request->only(['email', 'name', 'password']));
-    }
 
     /**
      * Assigns account and role to a specific user
@@ -75,21 +61,21 @@ trait RegistersAndAssigns
     }
 
     /**
-     * Assigns the given User to account and a domain
+     * Assigns the given $user to a $subDomain
      *
      * @param User $user
-     * @param $type
-     * @param $role
-     * @return mixed
+     * @param mixed ...$subDomain
      */
-    public function assign(User $user, $type, $role)
+    public function assignToSubdomain(User $user, ...$subDomain)
     {
-        $this->assignAccountAndRoles($user, $role);
+        list($client, $group) = $subDomain;
 
-        if($type instanceof Client) {
-            return $user->account->assignClient($type);
+        if (!is_null($client)) {
+            $user->account->assignClient(Client::find($client));
         }
 
-        return $user->account->assignGroup($type);
+        if(!is_null($group)) {
+            $user->account->assignGroup(Group::find($group));
+        }
     }
 }
