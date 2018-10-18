@@ -87,6 +87,8 @@ Route::middleware('auth:api')->group(function() {
 
         Route::get('users', 'AccountsController@index');
 
+        Route::delete('user/{user}', 'UsersController@destroy');
+
         Route::get('states', 'StatesController@index');
     });
 });
