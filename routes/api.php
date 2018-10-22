@@ -57,8 +57,9 @@ Route::middleware('auth:api')->group(function() {
         Route::prefix('clients')->group(function() {
             Route::put('{client}/assign -group/{group}', 'AdminsController@assignGroup');
             Route::delete('/{client}', 'ClientsController@destroy');
-            Route::post('/', 'ClientsController@create');
         });
+
+        Route::post('client', 'ClientsController@create');
     });
 
     Route::middleware(

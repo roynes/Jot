@@ -9,7 +9,7 @@ class Client extends BaseModel
     use HasGroups;
 
     protected $fillable = [
-        'name', 'url', 'detail'
+        'name', 'url', 'settings'
     ];
 
     protected $casts = [

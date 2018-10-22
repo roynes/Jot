@@ -6,8 +6,8 @@ use App\Models\Client;
 
 class ClientObserver
 {
-    public function creating(Client $group)
+    public function creating(Client $client)
     {
-        $group->settings = json_encode($group->settings);
+        $client->settings = json_encode($client->settings);
     }
 }

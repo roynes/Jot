@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ClientsListResource as Resource;
-use http\Env\Response;
 use Intervention\Image\Facades\Image;
 use App\Rules\EncodedStringIsImage;
 use App\Models\Client;
